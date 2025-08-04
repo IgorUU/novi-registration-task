@@ -40,15 +40,17 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="registration-form">
-      <h1>Login</h1>
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" minLength={6} required />
-      <Link to="/register">Register</Link>
-      <button type="submit" className="button-primary">
-        Login
-      </button>
-    </form>
+    <div className="login-form">
+      <form onSubmit={handleSubmit}>
+        <h1>Login</h1>
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" minLength={6} required />
+        <Link className="button-secondary" to="/register">Register</Link>
+        <button type="submit" className="button-primary">
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
 

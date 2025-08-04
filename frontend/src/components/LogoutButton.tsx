@@ -10,7 +10,7 @@ const LogoutButton: React.FC = () => {
 
   return (
     <form onSubmit={handleLogout}>
-      <button type="submit">Logout</button>
+      <button type="submit" className="logout-button">Logout</button>
     </form>
   );
 };
