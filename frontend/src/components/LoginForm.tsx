@@ -1,7 +1,7 @@
 import axios from "axios";
 import config from "../config/api";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const { login } = useAuth();
@@ -41,13 +41,10 @@ const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="registration-form">
+      <h1>Login</h1>
       <input type="email" name="email" placeholder="Email" required />
-      <input
-        type="password"
-        name="password"
-        minLength={6}
-        required
-      />
+      <input type="password" name="password" minLength={6} required />
+      <Link to="/register">Register</Link>
       <button type="submit" className="button-primary">
         Login
       </button>

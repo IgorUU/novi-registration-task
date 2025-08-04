@@ -34,6 +34,7 @@ const RegisterForm: React.FC = () => {
       onSubmit={handleSubmit}
       className="registration-form"
     >
+      <h1>Register</h1>
       <input
         type="text"
         name="firstName"
