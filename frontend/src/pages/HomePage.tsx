@@ -4,6 +4,7 @@ import "../App.css";
 
 const HomePage = () => {
   const { user } = useAuth();
+
   return (
     <div className="home-container">
       <LogoutButton />
