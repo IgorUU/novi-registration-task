@@ -1,6 +1,5 @@
 const config = {
-  apiUrl: import.meta.env.VITE_BACKEND_URL,
-  timeout: 10000,
+  apiUrl: import.meta.env.VITE_BACKEND_URL
 };
 
 export default config;

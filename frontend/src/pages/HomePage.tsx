@@ -2,7 +2,7 @@ import LogoutButton from "../components/LogoutButton";
 import { useAuth } from "../hooks/useAuth";
 import "../App.css";
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const { user } = useAuth();
 
   return (

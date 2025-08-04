@@ -1,6 +1,6 @@
 import RegisterForm from "../components/RegisterForm";
 
-const RegisterPage = () => {
+const RegisterPage: React.FC = () => {
   return (
      <RegisterForm />
   )

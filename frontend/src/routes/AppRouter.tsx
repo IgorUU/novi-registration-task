@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import NotFoundPage from "../pages/NotFoundPage";
 
 
-const AppRouter = () => {
+const AppRouter: React.FC = () => {
   const { user } = useAuth();
 
   return (
