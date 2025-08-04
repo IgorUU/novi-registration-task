@@ -3,11 +3,11 @@ import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const TOKEN_EXPIRATION = "15m";
+const TOKEN_EXPIRATION = "15";
 
 const createToken = (payload: object): string => {
   return jwt.sign(payload, process.env.JWT_SECRET as string, {
-    expiresIn: TOKEN_EXPIRATION,
+    expiresIn: `${TOKEN_EXPIRATION}m`,
   });
 };
 
@@ -35,10 +35,17 @@ export const register = async (req: Request, res: Response) => {
 
     const savedUser = await user.save();
 
-    const token = createToken({ userId: user.id, firstname: user.firstName });
+    const token = createToken({
+      userId: savedUser.id,
+      firstname: savedUser.firstName,
+    });
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: parseInt(TOKEN_EXPIRATION, 10) * 60 * 1000
+    });
 
     res.status(201).json({
-      token: token,
       user: {
         userId: user.id,
         firstName: user.firstName,
@@ -71,8 +78,12 @@ export const login = async (req: Request, res: Response) => {
       firstname: user.firstName,
     });
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: parseInt(TOKEN_EXPIRATION, 10) * 60 * 1000,
+    });
+
     res.status(200).json({
-      token: token,
       user: {
         userId: user.id,
         firstName: user.firstName,
@@ -83,4 +94,9 @@ export const login = async (req: Request, res: Response) => {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logout successful" });
 };
