@@ -11,7 +11,7 @@ const createToken = (payload: object): string => {
   });
 };
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response): Promise<Response|undefined> => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
@@ -57,7 +57,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<Response|undefined> => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email }).select("+password");
@@ -94,12 +94,12 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response): Promise<void>  => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-export const getCurrentUser = (req: Request, res: Response) => {
+export const getCurrentUser = (req: Request, res: Response): Response|undefined => {
   if (!req.user) return res.status(401).json({ message: "Not authenticated" });
 
   res.status(200).json({

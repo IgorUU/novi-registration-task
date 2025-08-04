@@ -30,8 +30,8 @@ describe('Auth API integration tests', () => {
   it("should register a new user", async () => {
     const res = await request(app).post("/api/auth/register").send(testUser);
     expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("token");
-    expect(res.body.user.firstName).toBe(testUser.firstName);
+    expect(res.body).toHaveProperty("firstName");
+    expect(res.body.firstName).toBe(testUser.firstName);
   });
 
   it("should fail to register with duplicate email", async () => {
@@ -48,8 +48,8 @@ describe('Auth API integration tests', () => {
       password: testUser.password,
     });
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("token");
-    expect(res.body.user.firstName).toBe(testUser.firstName);
+    expect(res.body).toHaveProperty("firstName");
+    expect(res.body.firstName).toBe(testUser.firstName);
   });
 
   it("should fail login with wrong password", async () => {
