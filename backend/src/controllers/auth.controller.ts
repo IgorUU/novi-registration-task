@@ -100,3 +100,14 @@ export const logout = (req: Request, res: Response) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logout successful" });
 };
+
+export const getCurrentUser = (req: Request, res: Response) => {
+  if (!req.user) return res.status(401).json({ message: "Not authenticated" });
+
+  res.status(200).json({
+    id: req.user._id,
+    email: req.user.email,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+  });
+};
