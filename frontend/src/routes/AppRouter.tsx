@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import { useAuth } from "../hooks/useAuth";
+import NotFoundPage from "../pages/NotFoundPage";
 
 
 const AppRouter = () => {
@@ -23,10 +24,9 @@ const AppRouter = () => {
           path="/register"
           element={!user ? <RegisterPage /> : <Navigate to={"/"} />}
         />
-        {/* TODO: Do we need this? */}
         <Route
           path="*"
-          element={<Navigate to={!user ? "/login" : "/"} />}
+          element={<NotFoundPage />}
         />
       </Routes>
     </BrowserRouter>

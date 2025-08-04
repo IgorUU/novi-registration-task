@@ -7,6 +7,10 @@ body {
   justify-content: center;
   padding: 1rem;
   text-align: center;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .logout-button {
@@ -76,6 +80,11 @@ button:hover {
   background-color: #4a90e2;
   color: white;
   transform: translateY(-2px);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
 @media (max-width: 768px) {
