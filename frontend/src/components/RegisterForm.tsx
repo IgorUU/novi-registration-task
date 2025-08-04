@@ -23,8 +23,8 @@ const RegisterForm: React.FC = () => {
       if (response.status !== 201) {
         throw new Error("Registration failed");
       }
-      // Set user as authenticated.
-      login();
+      // Set user.
+      login({ email: formValues.email as string, password: formValues.password as string });
       // Redirect to homepage.
       navigate("/");
     } catch (error) {

@@ -6,27 +6,27 @@ import { useAuth } from "../hooks/useAuth";
 
 
 const AppRouter = () => {
-  const { isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
+  const { user } = useAuth();
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={!isAuthenticated ? <LoginPage /> : <HomePage />}
+          element={!user ? <LoginPage /> : <HomePage />}
         />
         <Route
           path="/login"
-          element={!isAuthenticated ? <LoginPage /> : <Navigate to={"/"} />}
+          element={!user ? <LoginPage /> : <Navigate to={"/"} />}
         />
         <Route
           path="/register"
-          element={!isAuthenticated ? <RegisterPage /> : <Navigate to={"/"} />}
+          element={!user ? <RegisterPage /> : <Navigate to={"/"} />}
         />
         {/* TODO: Do we need this? */}
         <Route
           path="*"
-          element={<Navigate to={!isAuthenticated ? "/login" : "/"} />}
+          element={<Navigate to={!user ? "/login" : "/"} />}
         />
       </Routes>
     </BrowserRouter>
