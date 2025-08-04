@@ -40,17 +40,16 @@ export const register = async (req: Request, res: Response) => {
       firstname: savedUser.firstName,
     });
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      maxAge: parseInt(TOKEN_EXPIRATION, 10) * 60 * 1000
+      maxAge: parseInt(TOKEN_EXPIRATION, 10) * 60 * 1000,
     });
 
     res.status(201).json({
-      user: {
-        userId: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     });
   } catch (error) {
     console.log(error);
@@ -84,11 +83,10 @@ export const login = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({
-      user: {
-        userId: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     });
   } catch (error) {
     console.log(error);
@@ -96,9 +94,9 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const logout = (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
   res.clearCookie("token");
-  res.status(200).json({ message: "Logout successful" });
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 export const getCurrentUser = (req: Request, res: Response) => {

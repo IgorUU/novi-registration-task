@@ -17,21 +17,16 @@ const RegisterForm: React.FC = () => {
       password: formData.get("password"),
     };
 
-    // Send request.
     try {
       const response = await axios.post(`${config.apiUrl}/api/auth/register`, formValues, { withCredentials: true });
       if (response.status !== 201) {
         throw new Error("Registration failed");
       }
-      // Set user.
       login({ email: formValues.email as string, password: formValues.password as string });
-      // Redirect to homepage.
       navigate("/");
     } catch (error) {
       console.log(error);
     }
-
-    // Handle errors.
   };
 
   return (

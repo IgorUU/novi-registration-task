@@ -1,7 +1,12 @@
+import LogoutButton from "../components/LogoutButton";
+import { useAuth } from "../hooks/useAuth";
+
 const HomePage = () => {
+  const { user } = useAuth();
   return (
     <>
-      <h1>Hello world</h1>
+      <LogoutButton />
+      <h1>Hello {user?.firstName} {user?.lastName}</h1>
     </>
   )
 }
