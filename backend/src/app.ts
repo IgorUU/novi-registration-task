@@ -4,11 +4,13 @@ import authRoutes from "./routes/auth.routes";
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
 import rateLimit from "express-rate-limit";
+import helmet from 'helmet';
 
 dotenv.config();
 
 const app = express();
 
+app.use(helmet());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
