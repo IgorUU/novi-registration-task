@@ -3,11 +3,17 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
 const app = express();
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+})
+app.use('/api', limiter);
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true,

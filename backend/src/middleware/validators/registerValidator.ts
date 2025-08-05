@@ -6,6 +6,7 @@ export const registerValidator = [
   body("email")
   .trim()
   .isEmail()
+  .normalizeEmail()
   .withMessage("Invalid email format"),
   body("password")
   .isLength({min: 6})
