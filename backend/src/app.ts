@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
-import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
 import rateLimit from "express-rate-limit";
 import helmet from 'helmet';
+import dotenv from "dotenv";
 
 dotenv.config();
 

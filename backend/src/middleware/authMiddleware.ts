@@ -1,6 +1,7 @@
 
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
+
 import User, { UserDocument } from "../models/user.model";
 
 // Add custom properties to Express Request.
@@ -24,6 +25,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     req.user = user;
     next();
   } catch (err) {
+    if (err instanceof Error) console.log(err.message);
     res.status(401).json({ message: "Unauthorized" });
   }
 };

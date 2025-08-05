@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@types/cookie-parser": "^1.4.9",
     "bcrypt": "^6.0.0",
@@ -27,6 +29,7 @@
     "mongoose": "^8.17.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.32.0",
     "@faker-js/faker": "^9.9.0",
     "@jest/globals": "^30.0.5",
     "@shelf/jest-mongodb": "^4.3.2",
@@ -39,12 +42,15 @@
     "@types/mime": "^4.0.0",
     "@types/node": "^24.1.0",
     "@types/supertest": "^6.0.3",
+    "eslint": "^9.32.0",
+    "eslint-plugin-perfectionist": "^4.15.0",
     "jest": "^30.0.5",
     "nodemon": "^3.1.10",
     "npm": "^11.5.2",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "tsx": "^4.20.3",
+    "typescript-eslint": "^8.39.0"
   }
 }
