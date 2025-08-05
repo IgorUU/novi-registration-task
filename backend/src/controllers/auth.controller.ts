@@ -1,19 +1,20 @@
-import { Request, Response } from "express";
-import User from "../models/user.model";
 import bcrypt from "bcrypt";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+
+import User from "../models/user.model";
 
 const TOKEN_EXPIRATION = "15";
 
 const createToken = (payload: object): string => {
-  return jwt.sign(payload, process.env.JWT_SECRET as string, {
+  return jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: `${TOKEN_EXPIRATION}m`,
   });
 };
 
 export const register = async (req: Request, res: Response): Promise<Response|undefined> => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { email, firstName, lastName, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -27,17 +28,17 @@ export const register = async (req: Request, res: Response): Promise<Response|un
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = new User({
+      email: email,
       firstName: firstName,
       lastName: lastName,
-      email: email,
       password: hashedPassword,
     });
 
     const savedUser = await user.save();
 
     const token = createToken({
-      userId: savedUser.id,
       firstname: savedUser.firstName,
+      userId: savedUser.id,
     });
 
     res.cookie("token", token, {
@@ -46,9 +47,9 @@ export const register = async (req: Request, res: Response): Promise<Response|un
     });
 
     res.status(201).json({
-      id: user.id,
       email: user.email,
       firstName: user.firstName,
+      id: user.id,
       lastName: user.lastName,
     });
   } catch (error) {
@@ -73,8 +74,8 @@ export const login = async (req: Request, res: Response): Promise<Response|undef
     }
 
     const token = createToken({
-      userId: user.id,
       firstname: user.firstName,
+      userId: user.id,
     });
 
     res.cookie("token", token, {
@@ -83,9 +84,9 @@ export const login = async (req: Request, res: Response): Promise<Response|undef
     });
 
     res.status(200).json({
-      id: user.id,
       email: user.email,
       firstName: user.firstName,
+      id: user.id,
       lastName: user.lastName,
     });
   } catch (error) {
@@ -103,9 +104,9 @@ export const getCurrentUser = (req: Request, res: Response): Response|undefined 
   if (!req.user) return res.status(401).json({ message: "Not authenticated" });
 
   res.status(200).json({
-    id: req.user._id,
     email: req.user.email,
     firstName: req.user.firstName,
+    id: req.user._id,
     lastName: req.user.lastName,
   });
 };

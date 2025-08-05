@@ -1,12 +1,13 @@
 import { faker } from '@faker-js/faker';
-import app from '../app';
-import request from 'supertest';
 import mongoose from 'mongoose';
+import request from 'supertest';
+
+import app from '../app';
 
 const createTestUser = () => ({
+  email: faker.internet.email(),
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
-  email: faker.internet.email(),
   password: 'secret123',
 });
 
@@ -14,7 +15,7 @@ describe('Auth API integration tests', () => {
   let testUser: ReturnType<typeof createTestUser>
 
   beforeAll(async () => {
-    await mongoose.connect(globalThis.__MONGO_URI__!, {
+    await mongoose.connect(globalThis.__MONGO_URI__, {
       dbName: globalThis.__MONGO_DB_NAME__,
     });
   });

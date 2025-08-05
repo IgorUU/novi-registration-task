@@ -1,10 +1,11 @@
-import express from "express";
-import cors from "cors";
-import authRoutes from "./routes/auth.routes";
 import cookieParser from 'cookie-parser';
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from 'helmet';
-import dotenv from "dotenv";
+
+import authRoutes from "./routes/auth.routes";
 
 dotenv.config();
 
@@ -12,13 +13,13 @@ const app = express();
 
 app.use(helmet());
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
   max: 100,
+  windowMs: 15 * 60 * 1000,
 })
 app.use('/api', limiter);
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
   credentials: true,
+  origin: process.env.FRONTEND_URL,
 }));
 app.use(cookieParser());
 app.use(express.json());

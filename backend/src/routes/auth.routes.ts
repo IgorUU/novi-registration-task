@@ -1,9 +1,10 @@
 import { Router } from 'express';
+
 import { getCurrentUser, login, logout, register } from '../controllers/auth.controller';
-import { registerValidator } from "../middleware/validators/registerValidator";
+import { authMiddleware } from '../middleware/authMiddleware';
 import { validateRequest } from '../middleware/validateRequest';
 import { loginValidator } from '../middleware/validators/loginValidator';
-import { authMiddleware } from '../middleware/authMiddleware';
+import { registerValidator } from "../middleware/validators/registerValidator";
 
 const authRoutes = Router();
 
