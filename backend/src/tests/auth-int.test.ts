@@ -44,7 +44,7 @@ describe('Auth API integration tests', () => {
   it("should login with correct credentials", async () => {
     await request(app).post("/api/auth/register").send(testUser);
     const res = await request(app).post("/api/auth/login").send({
-      email: testUser.email,
+      email: testUser.email.toLowerCase(),
       password: testUser.password,
     });
     expect(res.status).toBe(200);
