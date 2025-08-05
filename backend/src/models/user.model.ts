@@ -3,6 +3,7 @@ import { Document, model, Schema } from 'mongoose'
 export interface UserDocument extends Document {
   email: string;
   firstName: string;
+  id: string;
   lastName: string;
   password: string;
 }

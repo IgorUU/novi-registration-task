@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import mongoose from 'mongoose';
-import request from 'supertest';
+import request, { Response } from 'supertest';
 
 import app from '../app';
 
@@ -29,37 +29,57 @@ describe('Auth API integration tests', () => {
   })
 
   it("should register a new user", async () => {
-    const res = await request(app).post("/api/auth/register").send(testUser);
+    const res: Response = await request(app).post("/api/auth/register").send(testUser);
     expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("firstName");
-    expect(res.body.firstName).toBe(testUser.firstName);
+    const body = res.body as {
+      email: string;
+      firstName: string;
+      id: string;
+      lastName: string;
+    };
+    expect(body).toHaveProperty("firstName");
+    expect(body.firstName).toBe(testUser.firstName);
   });
 
   it("should fail to register with duplicate email", async () => {
     await request(app).post("/api/auth/register").send(testUser);
-    const res = await request(app).post("/api/auth/register").send(testUser);
+    const res: Response = await request(app)
+      .post("/api/auth/register")
+      .send(testUser);
+    const body = res.body as {
+      message: string;
+    };
     expect(res.status).toBe(400);
-    expect(res.body.message).toBe("User with this email is already registered");
+    expect(body.message).toBe("User with this email is already registered");
   });
 
   it("should login with correct credentials", async () => {
     await request(app).post("/api/auth/register").send(testUser);
-    const res = await request(app).post("/api/auth/login").send({
+    const res: Response = await request(app).post("/api/auth/login").send({
       email: testUser.email.toLowerCase(),
       password: testUser.password,
     });
+    const body = res.body as {
+      email: string;
+      firstName: string;
+      id: string;
+      lastName: string;
+    };
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("firstName");
-    expect(res.body.firstName).toBe(testUser.firstName);
+    expect(body).toHaveProperty("firstName");
+    expect(body.firstName).toBe(testUser.firstName);
   });
 
   it("should fail login with wrong password", async () => {
     await request(app).post("/api/auth/register").send(testUser);
-    const res = await request(app).post("/api/auth/login").send({
+    const res: Response = await request(app).post("/api/auth/login").send({
       email: testUser.email,
       password: "wrongpassword",
     });
+    const body = res.body as {
+      message: string;
+    };
     expect(res.status).toBe(400);
-    expect(res.body.message).toBe("Invalid email or password");
+    expect(body.message).toBe("Invalid email or password");
   });
 })

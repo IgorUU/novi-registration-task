@@ -1,6 +1,5 @@
-
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 import User, { UserDocument } from "../models/user.model";
 
@@ -11,14 +10,34 @@ declare module "express-serve-static-core" {
   }
 }
 
+interface CustomJwtPayload extends JwtPayload {
+  userId: string;
+}
+
+const isCustomJwtPayload = (payload: unknown): payload is CustomJwtPayload => {
+  return (
+    typeof payload === "object" &&
+    payload !== null &&
+    "userId" in payload &&
+    typeof (payload as Record<string, unknown>).userId === "string"
+  );
+};
+
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.token;
-    if (!token) return res.status(401).json({ message: "No token" });
+    const token: unknown = req.cookies.token;
+    if (!token || typeof token !== "string")
+      return res.status(401).json({ message: "No token" });
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-      userId: string;
-    };
+    const secret = process.env.JWT_SECRET;
+    if (!secret) return res.status(401).json({ message: "Invalid JWT configuration" });
+
+    const decoded = jwt.verify(token, secret);
+
+    if (!isCustomJwtPayload(decoded)) {
+      return res.status(401).json({ message: "Invalid token format" });
+    }
+
     const user = await User.findById(decoded.userId);
     if (!user) return res.status(401).json({ message: "Invalid token" });
 

@@ -2,19 +2,37 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import User from "../models/user.model";
+import User, { UserDocument } from "../models/user.model";
 
 const TOKEN_EXPIRATION = "15";
 
+interface LoginRequestBody {
+  email: string;
+  password: string;
+}
+
+interface RegisterRequestBody {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+}
+
 const createToken = (payload: object): string => {
-  return jwt.sign(payload, process.env.JWT_SECRET!, {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error("Invalid JWT configuration");
+  }
+
+  return jwt.sign(payload, secret, {
     expiresIn: `${TOKEN_EXPIRATION}m`,
   });
 };
 
 export const register = async (req: Request, res: Response): Promise<Response|undefined> => {
   try {
-    const { email, firstName, lastName, password } = req.body;
+    const { email, firstName, lastName, password } =
+      req.body as RegisterRequestBody;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -34,10 +52,10 @@ export const register = async (req: Request, res: Response): Promise<Response|un
       password: hashedPassword,
     });
 
-    const savedUser = await user.save();
+    const savedUser: UserDocument = await user.save();
 
     const token = createToken({
-      firstname: savedUser.firstName,
+      firstName: savedUser.firstName,
       userId: savedUser.id,
     });
 
@@ -47,10 +65,10 @@ export const register = async (req: Request, res: Response): Promise<Response|un
     });
 
     res.status(201).json({
-      email: user.email,
-      firstName: user.firstName,
-      id: user.id,
-      lastName: user.lastName,
+      email: savedUser.email,
+      firstName: savedUser.firstName,
+      id: savedUser.id,
+      lastName: savedUser.lastName,
     });
   } catch (error) {
     console.log(error);
@@ -60,8 +78,8 @@ export const register = async (req: Request, res: Response): Promise<Response|un
 
 export const login = async (req: Request, res: Response): Promise<Response|undefined> => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email: email }).select("+password");
+    const { email, password } = req.body as LoginRequestBody;
+    const user = await User.findOne({ email: email }).select("+password") as null | UserDocument;
 
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -74,8 +92,8 @@ export const login = async (req: Request, res: Response): Promise<Response|undef
     }
 
     const token = createToken({
-      firstname: user.firstName,
-      userId: user.id,
+      firstname: (user).firstName,
+      userId: (user).id,
     });
 
     res.cookie("token", token, {
@@ -95,7 +113,7 @@ export const login = async (req: Request, res: Response): Promise<Response|undef
   }
 };
 
-export const logout = async (req: Request, res: Response): Promise<void>  => {
+export const logout = (req: Request, res: Response): void  => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out successfully" });
 };
