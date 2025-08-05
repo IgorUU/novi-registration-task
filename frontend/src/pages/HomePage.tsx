@@ -9,7 +9,7 @@ const HomePage: React.FC = () => {
     <div className="home-container">
       <LogoutButton />
       <h1>
-        Hello {user?.firstName} {user?.lastName}
+        Welcome {user?.firstName} {user?.lastName}
       </h1>
     </div>
   );
